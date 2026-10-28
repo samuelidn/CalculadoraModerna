@@ -1,8 +1,0 @@
-{
-  "name": "Calculadora Moderna Python & Web",
-  "description": "Calculadora elegante com tema preto e laranja, memória das últimas 5 operações e código executável para computador em Python.",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}
