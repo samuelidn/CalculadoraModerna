@@ -2,6 +2,10 @@
 
 Uma calculadora de desktop profissional, sofisticada e intuitiva desenvolvida em Python para Windows, Linux e macOS. Possui identidade visual em **preto profundo (#0A0A0E)**, botões arredondados em cinza escuro, destaques em **laranja vibrante (#FF6B00)** e fonte branca minimalista de alta legibilidade.
 
+## 📸 Captura de tela
+
+![Calculadora Moderna](IMG-CalculadoraModernaV1.2.0.png)
+
 ---
 
 ## ✨ Principais Recursos
