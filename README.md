@@ -2,10 +2,6 @@
 
 Uma calculadora de desktop profissional, sofisticada e intuitiva desenvolvida em Python para Windows, Linux e macOS. Possui identidade visual em **preto profundo (#0A0A0E)**, botões arredondados em cinza escuro, destaques em **laranja vibrante (#FF6B00)** e fonte branca minimalista de alta legibilidade.
 
-## 📸 Captura de tela
-
-![Calculadora Moderna V3](calculadora-v3.png)
-
 ---
 
 ## ✨ Principais Recursos
@@ -39,12 +35,12 @@ Uma calculadora de desktop profissional, sofisticada e intuitiva desenvolvida em
 - Respeita rigorosamente a precedência matemática (`*` e `/` antes de `+` e `-`).
 - Tratamento amigável de erros matemáticos (divisão por zero, raiz de número negativo, logaritmo de valor menor ou igual a zero, etc.), sem travar o aplicativo ou expor tracebacks técnicos.
 
-### 4. Sistema de Histórico com Persistência Local (5 Últimos Cálculos)
-- Cada operação é apresentada em um **cartão visual espaçado e elegante**.
-- Exibe expressão, resultado destacado e **data e hora (timestamp)** de cada cálculo.
-- **Clique para Reutilizar:** Botão *"Reutilizar ↗"* carrega o resultado instantaneamente no visor.
+### 4. Sistema de Histórico Integrado e Completo
+- **Histórico Integrado no Visor (Estilo Android):** Exibe em tempo real os 3 últimos cálculos logo acima do visor principal em forma de lista.
+- **Clique para Reutilizar:** Ao clicar em qualquer um dos 3 cálculos recentes, seu valor é carregado instantaneamente.
+- **Botão "Mostrar Histórico":** Abre uma sobreposição com a lista completa de todos os cálculos anteriores, independente da quantidade.
 - **Botão Limpar:** Exibe caixa de diálogo de confirmação antes de apagar todo o histórico.
-- **Persistência Local Automática em JSON:** Salva os dados na pasta do usuário:
+- **Persistência Local Automática em JSON:** Salva todos os cálculos na pasta do usuário:
   - Windows: `%APPDATA%\CalculadoraModerna\historico.json`
   - Linux/Mac: `~/.config/CalculadoraModerna/historico.json`
 - Se o arquivo não existir ou estiver corrompido, a calculadora inicia normalmente com histórico limpo.
@@ -52,7 +48,7 @@ Uma calculadora de desktop profissional, sofisticada e intuitiva desenvolvida em
 ### 5. Sons Programáticos Não-Bloqueantes
 - Sons curtos e agradáveis para digitação de números, operadores, igual e alerta de erro.
 - Executados em threads secundárias (*daemon*), sem travar nem causar engasgos na interface gráfica.
-- Botão no cabeçalho para ativar ou desativar os sons a qualquer momento.
+- **Botão Acima do "C":** Botão dedicado posicionado diretamente acima da tecla "C" para desativar/ativar os sons do teclado com um clique (com indicação "🔊 Som" e "🔇 Mudo").
 
 ### 6. Usabilidade e Produtividade
 - **Suporte ao Teclado Físico:** Digite números, operadores, `Enter`, `Backspace`, `Esc` e parênteses.
