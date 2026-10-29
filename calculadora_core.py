@@ -273,14 +273,13 @@ def format_number(val: Union[int, float]) -> str:
 
 class HistoryManager:
     """
-    Gerencia estritamente os 5 cálculos mais recentes.
-    Persiste localmente em %APPDATA%/CalculadoraModerna/historico.json no Windows
-    ou na pasta de configuração do usuário no Linux/Mac.
+    Gerencia o histórico de cálculos com persistência local em JSON.
+    Permite armazenar todos os cálculos anteriores sem limite rígido,
+    e fornece acesso rápido aos últimos cálculos (ex: 3 mais recentes para o visor).
     """
-    MAX_ITEMS = 5
-
-    def __init__(self, custom_path: Optional[Path] = None):
+    def __init__(self, custom_path: Optional[Path] = None, max_items: Optional[int] = None):
         self.file_path = custom_path or self._get_default_history_path()
+        self.max_items = max_items  # Se None, armazena todos os cálculos sem limite
         self.history: List[Dict[str, Any]] = []
         self.load_history()
 
@@ -314,9 +313,9 @@ class HistoryManager:
             with open(self.file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 if isinstance(data, list):
-                    # Garante apenas os 5 mais recentes
                     valid_items = []
-                    for item in data[:self.MAX_ITEMS]:
+                    items_to_read = data if self.max_items is None else data[:self.max_items]
+                    for item in items_to_read:
                         if isinstance(item, dict) and "expression" in item and "result" in item:
                             valid_items.append({
                                 "expression": str(item["expression"]),
@@ -333,28 +332,33 @@ class HistoryManager:
         return self.history
 
     def save_history(self):
-        """Salva a lista dos 5 últimos cálculos em arquivo JSON."""
+        """Salva a lista completa de cálculos em arquivo JSON."""
         try:
             self.file_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.file_path, "w", encoding="utf-8") as f:
-                json.dump(self.history[:self.MAX_ITEMS], f, ensure_ascii=False, indent=2)
+                items_to_save = self.history if self.max_items is None else self.history[:self.max_items]
+                json.dump(items_to_save, f, ensure_ascii=False, indent=2)
         except Exception:
             # Falha de gravação não deve fechar o aplicativo
             pass
 
     def add_entry(self, expression: str, result: str) -> Dict[str, Any]:
-        """Adiciona um cálculo e mantém estritamente os 5 mais recentes."""
+        """Adiciona um cálculo e mantém no histórico (mais recente no início)."""
         entry = {
             "expression": expression.strip(),
             "result": result.strip(),
             "timestamp": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         }
         self.history.insert(0, entry)
-        if len(self.history) > self.MAX_ITEMS:
-            self.history = self.history[:self.MAX_ITEMS]
+        if self.max_items is not None and len(self.history) > self.max_items:
+            self.history = self.history[:self.max_items]
 
         self.save_history()
         return entry
+
+    def get_recent(self, count: int = 3) -> List[Dict[str, Any]]:
+        """Retorna os cálculos mais recentes (padrão: 3 para o visor)."""
+        return self.history[:count]
 
     def clear(self):
         """Limpa o histórico e atualiza a persistência."""
