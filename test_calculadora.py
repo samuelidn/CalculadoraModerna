@@ -148,18 +148,31 @@ class TestHistoryManager(unittest.TestCase):
     def tearDown(self):
         self.temp_dir.cleanup()
 
-    def test_add_and_strict_5_limit(self):
+    def test_add_and_all_history_with_recent_3(self):
         for i in range(1, 8):
             self.history_manager.add_entry(f"{i} + 1", str(i + 1))
 
-        # Deve conter exatamente 5 itens
-        self.assertEqual(len(self.history_manager.history), 5)
+        # Deve conter todos os 7 itens registrados (sem limite restrito aos 5)
+        self.assertEqual(len(self.history_manager.history), 7)
         # Mais recente no topo (7 + 1 = 8)
         self.assertEqual(self.history_manager.history[0]["expression"], "7 + 1")
         self.assertEqual(self.history_manager.history[0]["result"], "8")
-        # Item mais antigo retido é o 3 + 1 = 4
-        self.assertEqual(self.history_manager.history[-1]["expression"], "3 + 1")
-        self.assertEqual(self.history_manager.history[-1]["result"], "4")
+        # Item mais antigo retido é o 1 + 1 = 2
+        self.assertEqual(self.history_manager.history[-1]["expression"], "1 + 1")
+        self.assertEqual(self.history_manager.history[-1]["result"], "2")
+
+        # Testa os 3 mais recentes para exibição no visor
+        recentes = self.history_manager.get_recent(3)
+        self.assertEqual(len(recentes), 3)
+        self.assertEqual(recentes[0]["result"], "8")
+        self.assertEqual(recentes[1]["result"], "7")
+        self.assertEqual(recentes[2]["result"], "6")
+
+    def test_custom_max_items_limit(self):
+        limited_manager = HistoryManager(custom_path=self.history_file, max_items=5)
+        for i in range(1, 8):
+            limited_manager.add_entry(f"{i} + 1", str(i + 1))
+        self.assertEqual(len(limited_manager.history), 5)
 
     def test_persistence_reload(self):
         # Salva dados
